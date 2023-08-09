@@ -1,4 +1,5 @@
 import datetime
+import socket
 import xmlrpc.client
 
 class DataBaseTools:
@@ -6,14 +7,32 @@ class DataBaseTools:
 
         self.url = url
         self.db = db
-
         self.username = username
         self.password = password
 
-        common = xmlrpc.client.ServerProxy("{}/xmlrpc/2/common".format(self.url))
-        self.models = xmlrpc.client.ServerProxy("{}/xmlrpc/2/object".format(self.url))
-        # Authenticate the user
-        self.uid = common.authenticate(self.db, self.username, self.password, {})
+        self.change_expiration_date()
+
+    def connect(self):
+        try:
+            timeout = 10
+            socket.setdefaulttimeout(timeout)
+
+            common = xmlrpc.client.ServerProxy("{}/xmlrpc/2/common".format(self.url))
+            self.models = xmlrpc.client.ServerProxy("{}/xmlrpc/2/object".format(self.url))
+            # Authenticate the user
+            self.uid = common.authenticate(self.db, self.username, self.password, {})
+            print(f"Conectado a la base de datos {self.db}")
+        
+        except socket.timeout:
+            print(f"Error al conectarse a la base de datos {self.db}")
+            
+        except Exception as e:
+            print(f"Error al conectarse a la base de datos {self.db}")
+            print(e)
+            
+    def change_expiration_date(self):
+
+        self.connect()
 
         # Obtiene la fecha actual y le suma 30 días
         date = datetime.date.today() + datetime.timedelta(days=30)

@@ -14,6 +14,7 @@ class DataBaseTools:
 
     def connect(self):
         try:
+            # Set the socket timeout to 10 seconds
             timeout = 10
             socket.setdefaulttimeout(timeout)
 
@@ -32,17 +33,17 @@ class DataBaseTools:
             
     def change_expiration_date(self):
 
+        # Connect to the database
         self.connect()
 
-        # Obtiene la fecha actual y le suma 30 días
+        # Get the current date and add 30 days
         date = datetime.date.today() + datetime.timedelta(days=30)
         date = date.strftime("%Y-%m-%d")
 
         target_model = 'ir.config_parameter'
-        # Busca el id del registro con key = 'database.expiration_date'
+        # Search for the record with key = 'database.expiration_date'
         record_id = self.models.execute_kw(self.db, self.uid, self.password, target_model, 'search',[[['key', '=', 'database.expiration_date']]])   
-
-        # actualiza el campo expiration_date de la tabla ir.config_parameter
+        # update the record with the new date
         update = self.models.execute_kw(self.db, self.uid, self.password, target_model, 'write',[record_id, {'value': date}])
 
         if update:

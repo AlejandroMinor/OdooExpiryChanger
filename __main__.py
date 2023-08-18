@@ -10,4 +10,8 @@ urls = [
 
 
 for url,db in urls:
-    expiry_changer.DataBaseTools(url,db,username,password)
+    try:
+        expiry_changer.DataBaseTools(url,db,username,password)
+    except Exception as e:
+        print(e)
+        continue

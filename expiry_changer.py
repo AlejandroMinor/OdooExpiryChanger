@@ -47,6 +47,6 @@ class DataBaseTools:
         update = self.models.execute_kw(self.db, self.uid, self.password, target_model, 'write',[record_id, {'value': date}])
 
         if update:
-            print(f"Se actualizó el registro con la fecha {date}")
+            print(f"{self.db} Se actualizó el registro con la fecha {date}")
         else:
             print("No se actualizó el registro")

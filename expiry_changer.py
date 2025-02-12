@@ -22,13 +22,13 @@ class DataBaseTools:
             self.models = xmlrpc.client.ServerProxy("{}/xmlrpc/2/object".format(self.url))
             # Authenticate the user
             self.uid = common.authenticate(self.db, self.username, self.password, {})
-            print(f"Conectado a la base de datos {self.db}")
+            print(f"Conectado {self.url}: {self.db}")
         
         except socket.timeout:
-            print(f"Error al conectarse a la base de datos {self.db}")
+            print(f"Error al conectarse {self.url}: {self.db}")
             
         except Exception as e:
-            print(f"Error al conectarse a la base de datos {self.db}")
+            print(f"Error al conectarse {self.url}: {self.db}")
             print(e)
             
     def change_expiration_date(self):
@@ -47,6 +47,6 @@ class DataBaseTools:
         update = self.models.execute_kw(self.db, self.uid, self.password, target_model, 'write',[record_id, {'value': date}])
 
         if update:
-            print(f"{self.db} Se actualizó el registro con la fecha {date}")
+            print(f"{self.url}: {self.db} Se actualizó el registro con la fecha {date}")
         else:
             print("No se actualizó el registro")
